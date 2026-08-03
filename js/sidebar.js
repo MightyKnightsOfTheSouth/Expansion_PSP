@@ -109,4 +109,3 @@ if (isVisible || currentFilter === 'all') {
             });
         });
 
-        renderSidebar();
