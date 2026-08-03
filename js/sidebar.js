@@ -48,9 +48,9 @@ if (!markerObj) return;
 
 if (isVisible) {
 
-    if (!map.hasLayer(markerObj.marker)) {
-        markerObj.marker.addTo(map);
-    }
+if (markerObj && !map.hasLayer(markerObj.marker)) {
+    markerObj.marker.addTo(map);
+}
 
     const card = document.createElement('div');
     card.className = 'sidebar-card';
@@ -65,9 +65,9 @@ if (isVisible) {
 
 } else {
 
-    if (map.hasLayer(markerObj.marker)) {
-        map.removeLayer(markerObj.marker);
-    }
+if (markerObj && map.hasLayer(markerObj.marker)) {
+    map.removeLayer(markerObj.marker);
+}
 
 }
             });
