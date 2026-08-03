@@ -1,3 +1,4 @@
+console.log("MARKERS FILE LOADED");
 // =============================
 // Marker Creation
 // =============================
