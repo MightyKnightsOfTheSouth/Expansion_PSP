@@ -4,6 +4,7 @@ const filterButtons = document.querySelectorAll('.filter-btn');
 const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 
+let currentFilter = 'all';
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
@@ -21,8 +22,6 @@ sidebarToggle.addEventListener('click', () => {
                                       college.locationName.toLowerCase().includes(query);
 
 let matchesFilter = false;
-
-let currentFilter = 'all';
 
 if (currentFilter === 'all') {
     matchesFilter = true;
