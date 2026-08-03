@@ -141,7 +141,7 @@ function loadMarkers() {
 
 
 
-        marker.addTo(map);
+        // marker.addTo(map);
 
     });
 
