@@ -42,7 +42,7 @@ else if (currentFilter === 'expansion') {
 const isVisible = matchesSearch && matchesFilter;
 const markerObj = markerMap.get(college.id);
 
-if (isVisible || currentFilter === 'all') {
+if (isVisible) {
 
     if (!map.hasLayer(markerObj.marker)) {
         markerObj.marker.addTo(map);
@@ -59,7 +59,7 @@ if (isVisible || currentFilter === 'all') {
 
     sidebarList.appendChild(card);
 
-} else if (currentFilter !== 'all') {
+} else {
 
     if (map.hasLayer(markerObj.marker)) {
         map.removeLayer(markerObj.marker);
