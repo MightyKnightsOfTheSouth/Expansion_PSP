@@ -44,7 +44,10 @@ else if (currentFilter === 'expansion') {
 const isVisible = matchesSearch && matchesFilter;
 const markerObj = markerMap.get(college.id);
 
-if (!markerObj) return;
+if (!markerObj) {
+    console.warn("Missing marker:", college.id);
+    return;
+}
 
 if (isVisible) {
 
