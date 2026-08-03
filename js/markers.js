@@ -142,7 +142,6 @@ function loadMarkers() {
 
         marker.addTo(map);
 
-
     });
 
 }
