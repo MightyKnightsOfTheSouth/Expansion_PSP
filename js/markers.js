@@ -133,17 +133,17 @@ function loadMarkers() {
 
 
 
-        marker.on("popupopen",()=>{
+marker.on("popupopen",()=>{
 
-            hoverCard.style.display = "none";
+    hoverCard.style.display = "none";
 
-        });
+});
 
 
+// DO NOT ADD MARKERS HERE
 
-marker.addTo(map);
 
-    });
+});
 
 }
 
