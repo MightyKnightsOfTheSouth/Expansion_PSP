@@ -115,8 +115,3 @@ filterButtons.forEach(btn => {
 
 
 renderSidebar();
-
-console.log(
-    "Albright exists value:",
-    collegiateData.find(college => college.id === "albright").exists
-);
