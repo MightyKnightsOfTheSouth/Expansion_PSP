@@ -1,3 +1,4 @@
+console.log("SIDEBAR FILE LOADED");
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
 const filterButtons = document.querySelectorAll('.filter-btn');
