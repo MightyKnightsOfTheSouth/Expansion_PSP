@@ -42,6 +42,8 @@ else if (currentFilter === 'expansion') {
 const isVisible = matchesSearch && matchesFilter;
 const markerObj = markerMap.get(college.id);
 
+if (!markerObj) return;
+
 if (isVisible) {
 
     if (!map.hasLayer(markerObj.marker)) {
@@ -100,12 +102,14 @@ if (isVisible) {
         
         searchInput.addEventListener('input', renderSidebar);
 
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                filterButtons.forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.dataset.filter;
-                renderSidebar();
-            });
-        });
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderSidebar();
+    });
+});
 
+
+renderSidebar();
