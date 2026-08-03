@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psi Sigma Phi Chapter & Expansion Map</title>
+
+    <!-- Tab Favicon-->
+    <link rel="icon" type="image/png" href="images/pspshield.png">
+
+    <!-- Google Fonts: Playfair Display (250 weight)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        /* Color Palette */
+        :root {
+         --black: #0a0a0a;
+         --black-2: #141414;
+         --black-3: #1c1c1c;
+         --black-4: #232323;
+         --silver: #c8c8c8;
+         --silver-dark: #7d7d7d;
+         --silver-light: #f5f5f5;
+         --white: #ffffff;
+         --light-card: #d4d4d4;
+         --light-hover: #dcdcdc;
+         --expansion-gray: #4b5563;
+         --active-green: #15803d;
+         --inactive-red: #780606;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--black);
+            font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Centered App Header */
+        .app-header {
+            background-color: var(--black);
+            border-bottom: 1px solid var(--black-4);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 10px 20px;
+            z-index: 1003;
+            height: 100px;
+            box-sizing: border-box;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .header-logo {
+            height: 75px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            font-size: 35px;
+            color: var(--white);
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .header-spacer {
+            visibility: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            width: 100vw;
+            height: calc(100vh - 50px);
+            position: relative;
+        }
+
+        .map-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            flex: 1;
+        }
+
+        .map-footer {
+            background-color: var(--black-2);
+            color: var(--silver);
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-top: 1px solid var(--black-4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 1000;
+        }
+
+        /* ===========================
+        Mobile Layout
+        =========================== */
+       @media (max-width: 768px) {
+
+    .app-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 90px;
+        padding: 8px 12px;
+        gap: 6px;
+        text-align: center;
+    }
+
+    .header-logo-container {
+        justify-content: center;
+    }
+
+    .header-logo {
+        height: 36px;
+        width: auto;
+    }
+
+    .header-title {
+        font-size: 16px;
+        line-height: 1.2;
+        white-space: normal;
+        max-width: 260px;
+        margin: 0;
+        text-align: center;
+    }
+
+    .header-spacer {
+        display: none;
+    }
+
+    .app-container {
+        height: calc(100vh - 90px);
+    }
+
+    .sidebar {
+        width: 280px;
+    }
+
+    .toggle-sidebar-btn {
+        top: 15px;
+    }
+
+    .map-footer {
+        font-size: 10px;
+        padding: 8px;
+        white-space: normal;
+    }
+}
+
+        /* Left Dockable Sidebar Styling */
+        .sidebar {
+            width: 360px;
+            background-color: var(--black-2);
+            border-right: 1px solid var(--black-4);
+            display: flex;
+            flex-direction: column;
+            z-index: 1001;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        /* Sidebar Toggle Handle */
+        .toggle-sidebar-btn {
+            position: absolute;
+            right:-36px;
+            top: 80px;
+            width: 36px;
+            height: 36px;
+            background-color: var(--black-2);
+            border: 1px solid var(--black-4);
+            border-left: none;
+            color: var(--silver);
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            z-index: 1002;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--black-4);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--black-3);
+            border: 1px solid var(--black-4);
+            border-radius: 4px;
+            color: var(--white);
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .search-box:focus {
+            border-color: var(--silver-dark);
+        }
+
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .filter-btn {
+            background-color: var(--black-3);
+            border: 1px solid var(--black-4);
+            color: var(--silver);
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--black-4);
+            color: var(--white);
+        }
+
+        .filter-btn.active {
+            background-color: var(--silver);
+            color: var(--black);
+            border-color: var(--silver);
+        }
+
+        .sidebar-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-card {
+            background-color: var(--black-3);
+            border: 1px solid var(--black-4);
+            border-radius: 6px;
+            padding: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .sidebar-card:hover, .sidebar-card.active-card {
+            border-color: var(--silver);
+            background-color: var(--black-4);
+        }
+
+        .card-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.2;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            font-style: italic;
+            color: var(--silver-dark);
+            margin-bottom: 6px;
+        }
+
+        .card-location {
+            font-size: 11px;
+            color: var(--silver);
+        }
+
+        /* Custom marker container centered with flexbox */
+        .custom-pin-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 42px;
+            height: 52px;
+            cursor: pointer;
+        }
+
+        /* Head of the pin */
+        .custom-pin-head {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid var(--pin-border, var(--black-2));
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            box-sizing: border-box;
+            padding: 2px;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        /* Marker teardrop tip */
+        .custom-pin-container::after {
+            content: '';
+            width: 0;
+            height: 0;
+            margin-top:-2px;
+            border-width: 16px 6px 0 6px;
+            border-style: solid;
+            border-color: var(--pin-bg, var(--black-2)) transparent transparent transparent;
+            z-index: 1;
+        }
+
+        .custom-pin-container:hover .custom-pin-head {
+            transform: scale(1.15);
+            border-color: var(--silver-dark) !important;
+        }
+
+        /* Hover Preview Card Styling */
+        #global-hover-card {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            display: none;
+            background-color: var(--white);
+            border: 1px solid var(--silver);
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            width: 280px;
+            color: var(--black-2);
+            box-sizing: border-box;
+        }
+
+        #global-hover-card .card-title {
+            color: var(--black);
+        }
+
+        #global-hover-card .card-subtitle {
+            color: var(--silver-dark);
+        }
+
+        #global-hover-card .card-location {
+            color: var(--black-3);
+        }
+
+        /* Inverted Clicked Profile Card Popup (Dark Theme) */
+        .leaflet-popup-content-wrapper {
+            background-color: var(--black) !important;
+            border: 1px solid var(--silver-dark) !important;
+            border-radius: 6px !important;
+            padding: 0 !important;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.75) !important;
+            width: 320px !important;
+            color: var(--silver-light) !important;
+        }
+
+        .leaflet-popup-content {
+            margin: 20px !important;
+            width: auto !important;
+        }
+
+        .leaflet-popup-tip {
+            background-color: var(--black) !important;
+            border: 1px solid var(--silver-dark);
+        }
+
+        .profile-status-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .status-badge {
+            background-color: var(--black-4);
+            color: var(--silver-light);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+
+        .status-badge.expansion {
+            background-color: var(--expansion-gray);
+            color: var(--white);
+        }
+
+        .status-badge.active-status {
+            background-color: var(--active-green);
+            color: var(--white);
+        }
+
+        .status-badge.inactive-status {
+            background-color: var(--inactive-red);
+            color: var(--white);
+        }
+
+        .profile-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+            margin: 0 0 4px 0;
+            line-height: 1.2;
+        }
+
+        .profile-subtitle {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--silver);
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--black-4);
+            padding-bottom: 12px;
+        }
+
+        .profile-section {
+            margin-bottom: 12px;
+        }
+
+        .profile-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--silver-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .profile-value {
+            font-size: 13px;
+            color: var(--silver-light);
+            line-height: 1.4;
+        }
+
+        .directions-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 6px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 1px dashed var(--silver);
+        }
+
+        .directions-btn:hover {
+            color: var(--silver);
+            border-bottom-color: var(--silver-dark);
+        }
+
+        .logo-container {
+            margin-bottom: 10px;
+        }
+
+        .logo-img {
+            max-height: 36px;
+            max-width: 100%;
+            object-fit: contain;
+            filter: brightness(1.1) contrast(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section-->
+    <header class="app-header">
+        <div class="header-logo-container">
+            <img class="header-logo" src="images/pspsword.png" alt="Psi Sigma Phi Logo">
+        </div>
+        <h1 class="header-title">Psi Sigma Phi Expansion and Retention Project</h1>
+        <div class="header-spacer"></div>
+    </header>
+
+    <div class="app-container">
+        <!-- Left Side Interactive Sidebar-->
+        <aside class="sidebar collapsed" id="sidebar">
+            <button class="toggle-sidebar-btn" id="sidebarToggle" title="Toggle Sidebar">➔</button>
+            <div class="sidebar-header">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search chapter, university, or city...">
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="existing">Existing</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="inactive">Inactive</button>
+                    <button class="filter-btn" data-filter="expansion">Expansion</button>
+                  
+                </div>
+            </div>
+            <div class="sidebar-list" id="sidebarList">
+                <!-- Dynamically populated-->
+            </div>
+        </aside>
+
+        <div class="map-wrapper">
+            <div id="map"></div>
+            <footer class="map-footer">
+                © 2026 Psi Sigma Phi Multicultural Fraternity, Inc. | Multicultural by birth, not by choice. | Breaking social fears and ignorance.
+            </footer>
+        </div>
+    </div>
+
+    <!-- Global Hover Preview Card-->
+    <div id="global-hover-card"></div>
+
+    <!-- Leaflet JS Library-->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Geographical center of the US is 39.8283,-98.5795
+        const map = L.map('map', {
+            center: [37.3,-77.8],
+            zoom: 5,
+            minZoom: 3
+        });
+
+        // Dark-themed map canvas layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        const hoverCard = document.getElementById('global-hover-card');
+
+        // Complete official chapter list
+        const collegiateData = [
+            {
+                id: "kappa",
+                name: "University of North Carolina at Chapel Hill",
+                subtitle: "Cryptik Kappa Chapter",
+                exists: true,
+                active: false,
+                founded: "October 31, 2003",
+                locationName: "103 South Building, Chapel Hill, North Carolina",
+                coordinates: [35.9049,-79.0469],
+                logo: "images/pspshield.png",
+                bio: "Cryptik Kappa Chapter established at UNC Chapel Hill.",
+                mapsLink: "https://maps.google.com/?q=103+South+Building,+Chapel+Hill,+North+Carolina"
+            },
+            {
+                id: "mu",
+                name: "University of North Carolina at Charlotte",
+                subtitle: "Valiant Mu Chapter",
+                exists: true,
+                active: true,
+                founded: "July 15, 2007",
+                locationName: "9201 University City Blvd, Charlotte, North Carolina",
+                coordinates: [35.3071,-80.7352],
+                logo: "images/pspshield.png",
+                bio: "Active chapter fostering leadership and brotherhood at UNC Charlotte.",
+                mapsLink: "https://maps.google.com/?q=9201+University+City+Blvd,+Charlotte,+North+Carolina"
+            },
+            {
+                id: "pi",
+                name: "University of North Carolina at Greensboro",
+                subtitle: "Prodigal Pi Chapter",
+                exists: true,
+                active: true,
+                founded: "November 30, 2010",
+                locationName: "203 Foust Building, Greensboro, North Carolina",
+                coordinates: [36.0682,-79.8102],
+                logo: "images/pspshield.png",
+                bio: "Active pillar chapter driving multicultural leadership at UNC Greensboro.",
+                mapsLink: "https://maps.google.com/?q=203+Foust+Building,+Greensboro,+North+Carolina"
+            },
+            
+            // =========================
+            // Expansion Institutions
+            // =========================
+
+            {
+                id: "ncatsu",
+                name: "North Carolina Agricultural and Technical State University",
+                subtitle: "Expansion Candidate",
+                exists: false,
+                active: false,
+                founded: "",
+                locationName: "1601 East Market Street, Greensboro, North Carolina",
+                coordinates: [36.0756,-79.7745],
+                logo: "images/pspexpansion.PNG",
+                bio: "Largest historically Black university in the United States.",
+                mapsLink: "https://maps.google.com/?q=1601+East+Market+Street,+Greensboro,+North+Carolina"
+            },
+    {
+        id: "guilford",
+        name: "Guilford College",
+        subtitle: "Minimal / No Greek Life",
+        exists: false,
+        active: false,
+        founded: "",
+        locationName: "5800 West Friendly Avenue, Greensboro, North Carolina",
+        coordinates: [36.0927,-79.8920],
+        logo: "images/pspexpansion.PNG",
+        bio: "Private liberal arts college in Greensboro with minimal Greek life.",
+        mapsLink: "https://maps.google.com/?q=5800+West+Friendly+Avenue,+Greensboro,+North+Carolina"
+    }, 
+        ];
+
+        const markerMap = new Map();
+        let currentFilter = 'all';
+        
+        function getSidebarCardHtml(college) {
+            const statusBadgeText = college.exists ? (college.active ? 'Existing • Active' : 'Existing • Inactive') : 'Expansion';
+            const statusClass = college.exists ? (college.active ? 'active-status' : 'inactive-status') : 'expansion';
+
+            return `
+                <div class="card-header-line">
+                    <div class="card-title">${college.name}</div>
+                    <span class="status-badge ${statusClass}">${statusBadgeText}</span>
+                </div>
+                <div class="card-subtitle">${college.subtitle}</div>
+                <div class="card-location">📍 ${college.locationName}</div>
+            `;
+        }
+
+        function getDetailProfileHtml(college) {
+            const statusText = college.exists ? 'Existing' : 'Expansion';
+            const statusClass = college.exists ? (college.active ? 'active-status' : 'inactive-status') : 'expansion';
+
+            let statusBadgesHtml = `
+                <div class="profile-status-bar">
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+            `;
+
+            if (college.exists) {
+                const activityText = college.active ? 'Active' : 'Inactive';
+                const activityClass = college.active ? 'active-status' : 'inactive-status';
+                statusBadgesHtml += `<span class="status-badge ${activityClass}">${activityText}</span>`;
+            }
+
+            statusBadgesHtml += `</div>`;
+
+            let html = `
+                ${statusBadgesHtml}
+                <div class="logo-container">
+                    <img class="logo-img" src="${college.logo}" alt="${college.name}">
+                </div>
+                <h3 class="profile-header">${college.name}</h3>
+                <div class="profile-subtitle">${college.subtitle}</div>
+            `;
+
+            if (college.exists && college.founded) {
+                html += `
+                    <div class="profile-section">
+                        <div class="profile-label">Founded</div>
+                        <div class="profile-value">${college.founded}</div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="profile-section">
+                    <div class="profile-label">Institution</div>
+                    <div class="profile-value">${college.name}</div>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-label">Location</div>
+                    <div class="profile-value">${college.locationName}</div>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-label">About</div>
+                    <div class="profile-value">${college.bio}</div>
+                </div>
+                <a href="${college.mapsLink}" target="_blank" class="directions-btn">📍 Get Directions</a>
+            `;
+
+            return html;
+        }
+
+        collegiateData.forEach(college => {
+
+    let markerImg;
+    let pinBgColor;
+    let pinBorderColor;
+
+    if (college.exists === false) {
+        // Expansion candidate
+        markerImg = 'images/pspexpansion.PNG';
+        pinBgColor = '#4b5563';
+        pinBorderColor = '#374151';
+
+    } else if (college.exists === true && college.active === true) {
+        // Existing active chapter
+        markerImg = 'images/pspexists.png';
+        pinBgColor = '#15803d';
+        pinBorderColor = '#166534';
+
+    } else {
+        // Existing inactive chapter
+        markerImg = 'images/pspexists.png';
+        pinBgColor = '#780606';
+        pinBorderColor = '#500404';
+    }
+
+    const customIcon = L.divIcon({
+        html: `
+            <div class="custom-pin-container" style="--pin-bg:${pinBgColor};--pin-border:${pinBorderColor};">
+                <div class="custom-pin-head" 
+                     style="background-image:url('${markerImg}'); background-color:${pinBgColor};">
+                </div>
+            </div>
+        `,
+        className: '',
+        iconSize: [42,50],
+        iconAnchor: [21,50]
+    });
+            const marker = L.marker(college.coordinates, { icon: customIcon });
+            markerMap.set(college.id, { marker, data: college });
+
+            marker.bindPopup(getDetailProfileHtml(college), {
+                direction: 'auto',
+                offset: [0,-20],
+                closeButton: false,
+                autoPan: false
+            });
+
+            marker.on('click', () => {
+                focusLocation(college);
+            });
+
+            marker.on('mouseover', (e) => {
+                hoverCard.innerHTML = getSidebarCardHtml(college);
+                hoverCard.style.display = 'block';
+                updateHoverPosition(e.originalEvent);
+            });
+
+            marker.on('mousemove', (e) => {
+                updateHoverPosition(e.originalEvent);
+            });
+
+            marker.on('mouseout', () => {
+                hoverCard.style.display = 'none';
+            });
+
+            marker.on('popupopen', () => {
+                hoverCard.style.display = 'none';
+            });
+        });
+
+        function updateHoverPosition(e) {
+            const padding = 20;
+            const cardWidth = hoverCard.offsetWidth || 280;
+            const cardHeight = hoverCard.offsetHeight || 120;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let left = e.clientX + 15;
+            let top = e.clientY- 20;
+
+            if (left + cardWidth > viewportWidth- padding) {
+                left = e.clientX- cardWidth- 15;
+            }
+
+            if (top + cardHeight > viewportHeight- padding) {
+                top = viewportHeight- cardHeight- padding;
+            }
+
+            if (top < padding) {
+                top = padding;
+            }
+
+            hoverCard.style.left = `${left}px`;
+            hoverCard.style.top = `${top}px`;
+        }
+
+const sidebarList = document.getElementById('sidebarList');
+const searchInput = document.getElementById('searchInput');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+
+      
+sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    sidebarToggle.innerText = sidebar.classList.contains('collapsed') ? '➔' : '❮';
+});
+
+      
+        function renderSidebar() {
+            const query = searchInput.value.toLowerCase().trim();
+            sidebarList.innerHTML = '';
+
+            collegiateData.forEach(college => {
+                const matchesSearch = college.name.toLowerCase().includes(query) ||
+                                      college.subtitle.toLowerCase().includes(query) ||
+                                      college.locationName.toLowerCase().includes(query);
+
+let matchesFilter = false;
+
+if (currentFilter === 'all') {
+    matchesFilter = true;
+}
+else if (currentFilter === 'existing') {
+    matchesFilter = college.exists === true;
+}
+else if (currentFilter === 'active') {
+    matchesFilter = college.exists === true && college.active === true;
+}
+else if (currentFilter === 'inactive') {
+    matchesFilter = college.exists === true && college.active === false;
+}
+else if (currentFilter === 'expansion') {
+    matchesFilter = college.exists === false;
+}
+
+const isVisible = matchesSearch && matchesFilter;
+const markerObj = markerMap.get(college.id);
+
+if (isVisible || currentFilter === 'all') {
+
+    if (!map.hasLayer(markerObj.marker)) {
+        markerObj.marker.addTo(map);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'sidebar-card';
+    card.id = `sidebar-card-${college.id}`;
+    card.innerHTML = getSidebarCardHtml(college);
+
+    card.addEventListener('click', () => {
+        focusLocation(college, true);
+    });
+
+    sidebarList.appendChild(card);
+
+} else if (currentFilter !== 'all') {
+
+    if (map.hasLayer(markerObj.marker)) {
+        map.removeLayer(markerObj.marker);
+    }
+
+}
+            });
+        }
+
+        function focusLocation(college, triggerPopup = true) {
+            const targetZoom = 13;
+            const markerObj = markerMap.get(college.id);
+
+            const latLng = L.latLng(college.coordinates);
+            const containerHeight = map.getSize().y;
+            const yOffset = (0.80- 0.50) * containerHeight;
+
+            const pinPoint = map.project(latLng, targetZoom);
+            const targetPoint = L.point(pinPoint.x, pinPoint.y- yOffset);
+            const targetLatLng = map.unproject(targetPoint, targetZoom);
+
+            map.flyTo(targetLatLng, targetZoom, {
+                duration: 1.2
+            });
+
+            document.querySelectorAll('.sidebar-card').forEach(c => c.classList.remove('active-card'));
+            const selectedCard = document.getElementById(`sidebar-card-${college.id}`);
+            if (selectedCard) {
+                selectedCard.classList.add('active-card');
+                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            if (triggerPopup && markerObj) {
+    markerObj.marker.openPopup();
+            }
+        }
+    
+        
+        searchInput.addEventListener('input', renderSidebar);
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.filter;
+                renderSidebar();
+            });
+        });
+
+        renderSidebar();
+    </script>
+</body>
+</html>
