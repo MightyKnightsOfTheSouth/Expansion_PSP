@@ -5,6 +5,8 @@
 const markerMap = new Map();
 
 
+function loadMarkers() {
+
 collegiateData.forEach(college => {
 
     let markerImg;
@@ -61,7 +63,9 @@ collegiateData.forEach(college => {
 
     });
 
+function loadMarkers() {
 
+collegiateData.forEach(college => {
 
     const marker = L.marker(
         college.coordinates,
