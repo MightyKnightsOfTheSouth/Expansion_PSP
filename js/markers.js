@@ -81,7 +81,33 @@ collegiateData.forEach(college => {
     });
 
 
-    marker.addTo(map);
+marker.bindPopup(getDetailProfileHtml(college), {
+    direction: 'auto',
+    offset: [0,-20],
+    closeButton: false,
+    autoPan: false
+});
+
+
+marker.on('mouseover', (e)=>{
+
+    hoverCard.innerHTML = getSidebarCardHtml(college);
+
+    hoverCard.style.display = "block";
+
+    updateHoverPosition(e.originalEvent);
+
+});
+
+
+marker.on('mouseout',()=>{
+
+    hoverCard.style.display = "none";
+
+});
+
+
+marker.addTo(map);
 
 
 
