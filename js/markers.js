@@ -1,3 +1,7 @@
+// =============================
+// Marker Creation
+// =============================
+
 const markerMap = new Map();
 
 
@@ -73,9 +77,73 @@ collegiateData.forEach(college => {
     });
 
 
-
     marker.addTo(map);
 
+
+
+    // =============================
+    // Popup
+    // =============================
+
+    marker.bindPopup(
+        getDetailProfileHtml(college),
+        {
+            direction: "auto",
+            offset: [0,-20],
+            closeButton: false,
+            autoPan: false
+        }
+    );
+
+
+
+    // =============================
+    // Click Marker
+    // =============================
+
+    marker.on("click", () => {
+        focusLocation(college);
+    });
+
+
+
+    // =============================
+    // Hover Preview
+    // =============================
+
+    marker.on("mouseover", (e) => {
+
+        hoverCard.innerHTML = getSidebarCardHtml(college);
+
+        hoverCard.style.display = "block";
+
+        updateHoverPosition(e.originalEvent);
+
+    });
+
+
+
+    marker.on("mousemove", (e) => {
+
+        updateHoverPosition(e.originalEvent);
+
+    });
+
+
+
+    marker.on("mouseout", () => {
+
+        hoverCard.style.display = "none";
+
+    });
+
+
+
+    marker.on("popupopen", () => {
+
+        hoverCard.style.display = "none";
+
+    });
 
 
 });
