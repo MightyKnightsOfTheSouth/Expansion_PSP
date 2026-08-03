@@ -1,4 +1,4 @@
-const hoverCard = document.getElementById('global-hover-card');
+window.hoverCard = document.getElementById('global-hover-card');
 
 function getSidebarCardHtml(college) {
 
