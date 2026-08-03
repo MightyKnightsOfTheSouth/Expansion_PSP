@@ -1,4 +1,4 @@
-window.hoverCard = document.getElementById('global-hover-card');
+const hoverCard = document.getElementById('global-hover-card');
 
 function getSidebarCardHtml(college) {
 
@@ -82,6 +82,54 @@ function getDetailProfileHtml(college) {
         <div class="profile-subtitle">
             ${college.subtitle}
         </div>
+    `;
+
+
+    if (college.exists && college.founded) {
+
+        html += `
+            <div class="profile-section">
+                <div class="profile-label">Founded</div>
+                <div class="profile-value">
+                    ${college.founded}
+                </div>
+            </div>
+        `;
+    }
+
+
+    html += `
+
+        <div class="profile-section">
+            <div class="profile-label">Institution</div>
+            <div class="profile-value">
+                ${college.name}
+            </div>
+        </div>
+
+
+        <div class="profile-section">
+            <div class="profile-label">Location</div>
+            <div class="profile-value">
+                ${college.locationName}
+            </div>
+        </div>
+
+
+        <div class="profile-section">
+            <div class="profile-label">About</div>
+            <div class="profile-value">
+                ${college.bio}
+            </div>
+        </div>
+
+
+        <a href="${college.mapsLink}" 
+           target="_blank" 
+           class="directions-btn">
+           📍 Get Directions
+        </a>
+
     `;
 
 
