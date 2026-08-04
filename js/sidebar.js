@@ -56,11 +56,43 @@ if (markerObj && !map.hasLayer(markerObj.marker)) {
     markerObj.marker.addTo(map);
 }
 
-    const card = document.createElement('div');
-    card.className = 'sidebar-card';
-    card.id = `sidebar-card-${college.id}`;
-    card.innerHTML = getSidebarCardHtml(college);
+const card = document.createElement('div');
 
+card.className = 'sidebar-card';
+
+card.id = `sidebar-card-${college.id}`;
+
+card.innerHTML = `
+    <input 
+        type="checkbox" 
+        class="college-select"
+        data-id="${college.id}"
+        ${selectedColleges.has(college.id) ? "checked" : ""}
+    >
+
+    ${getSidebarCardHtml(college)}
+`;
+
+const checkbox = card.querySelector('.college-select');
+
+checkbox.addEventListener('click', (e) => {
+
+    e.stopPropagation();
+
+    if (checkbox.checked) {
+
+        selectedColleges.add(college.id);
+
+    } else {
+
+        selectedColleges.delete(college.id);
+
+    }
+
+    console.log("Selected:", [...selectedColleges]);
+
+});
+      
     card.addEventListener('click', () => {
         focusLocation(college, true);
     });
