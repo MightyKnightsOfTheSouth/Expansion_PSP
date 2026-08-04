@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 8:32PM");
+console.log("SIDEBAR FILE LOADED 8:36PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -87,7 +87,7 @@ card.innerHTML = `
 
 const checkbox = card.querySelector('.college-select');
 
-checkbox.addEventListener('click', (e) => {
+checkbox.addEventListener('change', (e) => {
 
     e.stopPropagation();
 
@@ -101,7 +101,10 @@ checkbox.addEventListener('click', (e) => {
 
     }
 
-    console.log("Selected:", [...selectedColleges]);
+    console.log(
+        "Selected Colleges:",
+        [...selectedColleges]
+    );
 
 });
       
