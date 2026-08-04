@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 9:19PM");
+console.log("SIDEBAR FILE LOADED 9:29PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -46,13 +46,10 @@ else if (currentFilter === 'expansion') {
     matchesFilter = college.exists === false;
 }
 
-const matchesSelection = true;
-                  
 
 const isVisible =
     matchesSearch &&
-    matchesFilter &&
-    matchesSelection;
+    matchesFilter;
                   
 const markerObj = markerMap.get(college.id);
 
@@ -92,7 +89,7 @@ checkbox.addEventListener("click", (e) => {
 
 });
 
- checkbox.addEventListener("change", () => {
+checkbox.addEventListener("change", () => {
 
     if (checkbox.checked) {
         selectedColleges.add(college.id);
@@ -103,9 +100,11 @@ checkbox.addEventListener("click", (e) => {
     selectedCount.innerText =
         `Selected: ${selectedColleges.size}`;
 
-    zoomToSelected();
+    setTimeout(() => {
+        zoomToSelected();
+    }, 100);
 
-});     
+});  
       
     card.addEventListener('click', () => {
         focusLocation(college, true);
@@ -245,7 +244,8 @@ clearSelectionBtn.addEventListener('click', () => {
 
 });
 
-
 // INITIAL LOAD
 
-renderSidebar();
+window.addEventListener("load", () => {
+    renderSidebar();
+});
