@@ -273,13 +273,28 @@
                 bio: "Fearless Phi Chapter established at Colorado College.",
                 mapsLink: "https://maps.google.com/?q=14+E+Cache+La+Poudre+St,+Colorado+Springs,+Colorado"
             },
+
+
+                
+
+
+                
                       // =========================
-            // Expansion Institutions
-            // =========================
+                // Expansion Institutions
+                // =========================
+
+
+
+                
+
+                
+                
 
             // =========================
             // NJ Schools
             // =========================
+
+                
             
             {
                 id: "rutgersnewark",
@@ -463,11 +478,17 @@
                 bio: "Public university serving southern New Jersey.",
                 mapsLink: "https://maps.google.com/?q=101+Vera+King+Farris+Drive,+Galloway,+New+Jersey+08205"
             },
-            
+
+
+
+                
             // =========================
             // NC Schools
             // =========================
-            
+
+
+
+                
             {
                 id: "ncsu",
                 name: "North Carolina State University",
@@ -936,24 +957,17 @@
         bio: "Private women's college in Winston-Salem.",
         mapsLink: "https://maps.google.com/?q=601+South+Church+Street,+Winston-Salem,+North+Carolina"
     },
-    {
-        id: "meredith",
-        name: "Meredith College",
-        subtitle: "Minimal / No Greek Life",
-        exists: false,
-        active: false,
-        founded: "",
-        locationName: "3800 Hillsborough Street, Raleigh, North Carolina",
-        coordinates: [35.7941,-78.6864],
-        logo: "images/pspexpansion.png",
-        bio: "Private women's college in Raleigh with honor societies rather than traditional social Greek organizations.",
-        mapsLink: "https://maps.google.com/?q=3800+Hillsborough+Street,+Raleigh,+North+Carolina"
-    },            
+
+
+                
             
             // =========================
             // VA Schools
             // =========================
-            
+
+
+
+                
             {
     id: "richmond",
     name: "University of Richmond",
@@ -1422,10 +1436,15 @@
         bio: "Private women's university in Roanoke.",
         mapsLink: "https://maps.google.com/?q=7916+Williamson+Road,+Roanoke,+Virginia"
     },
+
+                
      
             // =========================
             // PA Schools
             // =========================
+
+
+                
         
     {
         id: "penn",
@@ -2558,11 +2577,16 @@
         bio: "Private Christian college with no traditional Greek system.",
         mapsLink: "https://maps.google.com/?q=901+Eden+Road,+Lancaster,+Pennsylvania"
     },
+
+
+                
            
             // =========================
-            // MD, DC, DE Schools
+            // MD Schools
             // =========================
 
+
+                
         
         {
         id: "towson",
@@ -2798,6 +2822,16 @@
         bio: "Private liberal arts college on Maryland's Eastern Shore.",
         mapsLink: "https://maps.google.com/?q=300+Washington+Avenue,+Chestertown,+Maryland"
     },
+
+                
+
+                // =========================
+            // DC Schools
+            // =========================
+
+
+
+                
     {
         id: "howard",
         name: "Howard University",
@@ -2889,6 +2923,16 @@
         bio: "Public historically Black university in Washington, DC.",
         mapsLink: "https://maps.google.com/?q=4200+Connecticut+Avenue+NW,+Washington,+DC"
     },
+
+
+                
+                // =========================
+            // DE Schools
+            // =========================
+
+
+
+                
     {
         id: "udelaware",
         name: "University of Delaware",
