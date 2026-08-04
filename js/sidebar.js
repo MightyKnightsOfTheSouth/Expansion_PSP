@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED");
+console.log("SIDEBAR FILE LOADED 8:18PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
