@@ -45,13 +45,33 @@ title="Toggle Sidebar">
 </button>
             <div class="sidebar-header">
                 <input type="text" id="searchInput" class="search-box" placeholder="Search chapter, university, state, or city...">
-                <div class="filter-tabs">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="existing">Existing</button>
-                    <button class="filter-btn" data-filter="active">Active</button>
-                    <button class="filter-btn" data-filter="inactive">Inactive</button>
-                    <button class="filter-btn" data-filter="expansion">Expansion</button>
-                </div>
+<div class="filter-tabs">
+
+    <button class="filter-btn all-filter" data-filter="all">
+        All
+    </button>
+
+    <div class="filter-row">
+        <button class="filter-btn" data-filter="active">
+            Active
+        </button>
+
+        <button class="filter-btn" data-filter="inactive">
+            Inactive
+        </button>
+    </div>
+
+    <div class="filter-row">
+        <button class="filter-btn" data-filter="existing">
+            Existing
+        </button>
+
+        <button class="filter-btn" data-filter="expansion">
+            Expansion
+        </button>
+    </div>
+
+</div>
 
 <div class="selection-controls">
 
