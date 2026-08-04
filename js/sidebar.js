@@ -7,6 +7,7 @@ const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 
 let currentFilter = 'all';
+let selectedColleges = new Set();
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
