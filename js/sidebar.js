@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 10:33PM");
+console.log("SIDEBAR FILE LOADED 11:04PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -11,7 +11,7 @@ const selectedCount = document.getElementById('selectedCount');
 
 let currentFilter = 'all';
 let selectedColleges = new Set();
-let showSelectedOnly = false;
+
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
@@ -47,15 +47,9 @@ else if (currentFilter === 'expansion') {
     matchesFilter = college.exists === false;
 }
 
-
-const matchesSelection =
-    !showSelectedOnly || selectedColleges.has(college.id);
-
-
-const isVisible =
+                  const isVisible =
     matchesSearch &&
-    matchesFilter &&
-    matchesSelection;
+    matchesFilter;
                   
 const markerObj = markerMap.get(college.id);
 
@@ -64,10 +58,21 @@ if (!markerObj) {
     return;
 }
 
-if (isVisible) {
+if (
+    selectedColleges.size === 0 ||
+    selectedColleges.has(college.id)
+) {
 
-if (markerObj && !map.hasLayer(markerObj.marker)) {
-    markerObj.marker.addTo(map);
+    if (!map.hasLayer(markerObj.marker)) {
+        markerObj.marker.addTo(map);
+    }
+
+} else {
+
+    if (map.hasLayer(markerObj.marker)) {
+        map.removeLayer(markerObj.marker);
+    }
+
 }
 
 const card = document.createElement('div');
@@ -103,14 +108,12 @@ checkbox.addEventListener("change", () => {
         selectedColleges.delete(college.id);
     }
 
-    selectedCount.innerText =
-        `Selected: ${selectedColleges.size}`;
+selectedCount.innerText =
+    `Selected: ${selectedColleges.size}`;
 
-    showSelectedOnly = selectedColleges.size > 0;
+updateSelectionVisibility();
 
-    renderSidebar();
-
-    zoomToSelected();
+zoomToSelected();
 
 });
       
@@ -192,31 +195,44 @@ function zoomToSelected() {
     const bounds = L.latLngBounds(selectedMarkers);
 
     map.fitBounds(bounds, {
-        padding: [60,60],
+        padding: [60, 60],
         animate: true
     });
 
 }
-        
-        searchInput.addEventListener('input', renderSidebar);
 
-filterButtons.forEach(btn => {
 
-    btn.addEventListener('click', (e) => {
+// SHOW ONLY SELECTED MARKERS
 
-        filterButtons.forEach(b => 
-            b.classList.remove('active')
-        );
+function updateSelectionVisibility() {
 
-        e.target.classList.add('active');
+    collegiateData.forEach(college => {
 
-        currentFilter = e.target.dataset.filter;
+        const markerObj = markerMap.get(college.id);
 
-        renderSidebar();
+        if (!markerObj) return;
+
+
+        if (
+            selectedColleges.size === 0 ||
+            selectedColleges.has(college.id)
+        ) {
+
+            if (!map.hasLayer(markerObj.marker)) {
+                markerObj.marker.addTo(map);
+            }
+
+        } else {
+
+            if (map.hasLayer(markerObj.marker)) {
+                map.removeLayer(markerObj.marker);
+            }
+
+        }
 
     });
 
-});
+}
 
 
 // CLEAR ALL SELECTIONS
@@ -226,7 +242,9 @@ clearSelectionBtn.addEventListener('click', () => {
 
     // Clear all selected colleges
 selectedColleges.clear();
-showSelectedOnly = false;
+
+updateSelectionVisibility();
+
 
     // Return to ALL filter
     currentFilter = "all";
