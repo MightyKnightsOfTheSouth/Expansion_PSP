@@ -87,20 +87,29 @@
             flex: 1;
         }
 
-        .map-footer {
-            background-color: var(--black-2);
-            color: var(--silver);
-            text-align: center;
-            padding: 14px 20px;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            border-top: 1px solid var(--black-4);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            z-index: 1000;
-        }
+.map-footer {
+    background-color: var(--black-2);
+    color: var(--silver);
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-top: 1px solid var(--black-4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1000;
+}
+
+.map-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.map-footer a:hover {
+    text-decoration: underline;
+}
 
         /* ===========================
         Mobile Layout
