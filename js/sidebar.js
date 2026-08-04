@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 8:18PM");
+console.log("SIDEBAR FILE LOADED 8:32PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -6,8 +6,12 @@ const filterButtons = document.querySelectorAll('.filter-btn');
 const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 
+const showSelectedBtn = document.getElementById('showSelectedBtn');
+const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+
 let currentFilter = 'all';
 let selectedColleges = new Set();
+let showSelectedOnly = false;
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
@@ -42,7 +46,15 @@ else if (currentFilter === 'expansion') {
     matchesFilter = college.exists === false;
 }
 
-const isVisible = matchesSearch && matchesFilter;
+const matchesSelection =
+    !showSelectedOnly || selectedColleges.has(college.id);
+
+
+const isVisible =
+    matchesSearch &&
+    matchesFilter &&
+    matchesSelection;
+                  
 const markerObj = markerMap.get(college.id);
 
 if (!markerObj) {
@@ -141,13 +153,48 @@ if (markerObj && map.hasLayer(markerObj.marker)) {
         searchInput.addEventListener('input', renderSidebar);
 
 filterButtons.forEach(btn => {
+
     btn.addEventListener('click', (e) => {
-        filterButtons.forEach(b => b.classList.remove('active'));
+
+        filterButtons.forEach(b => 
+            b.classList.remove('active')
+        );
+
         e.target.classList.add('active');
+
         currentFilter = e.target.dataset.filter;
+
         renderSidebar();
+
     });
+
 });
 
+
+// SHOW ONLY SELECTED COLLEGES
+
+showSelectedBtn.addEventListener('click', () => {
+
+    showSelectedOnly = true;
+
+    renderSidebar();
+
+});
+
+
+// CLEAR ALL SELECTIONS
+
+clearSelectionBtn.addEventListener('click', () => {
+
+    selectedColleges.clear();
+
+    showSelectedOnly = false;
+
+    renderSidebar();
+
+});
+
+
+// INITIAL LOAD
 
 renderSidebar();
