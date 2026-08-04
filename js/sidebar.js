@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 8:49PM");
+console.log("SIDEBAR FILE LOADED 9:13PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -6,12 +6,10 @@ const filterButtons = document.querySelectorAll('.filter-btn');
 const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 
-const showSelectedBtn = document.getElementById('showSelectedBtn');
 const clearSelectionBtn = document.getElementById('clearSelectionBtn');
 
 let currentFilter = 'all';
 let selectedColleges = new Set();
-let showSelectedOnly = false;
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
@@ -22,6 +20,7 @@ sidebarToggle.addEventListener('click', () => {
         function renderSidebar() {
             const query = searchInput.value.toLowerCase().trim();
             sidebarList.innerHTML = '';
+            selectedCount.innerText = `Selected: ${selectedColleges.size}`;
 
             collegiateData.forEach(college => {
                 const matchesSearch = college.name.toLowerCase().includes(query) ||
@@ -87,26 +86,26 @@ card.innerHTML = `
 
 const checkbox = card.querySelector('.college-select');
 
-checkbox.addEventListener('change', (e) => {
+checkbox.addEventListener("click", (e) => {
 
     e.stopPropagation();
 
+});
+
+ checkbox.addEventListener("change", () => {
+
     if (checkbox.checked) {
-
         selectedColleges.add(college.id);
-
     } else {
-
         selectedColleges.delete(college.id);
-
     }
 
-    console.log(
-        "Selected Colleges:",
-        [...selectedColleges]
-    );
+    selectedCount.innerText =
+        `Selected: ${selectedColleges.size}`;
 
-});
+    zoomToSelected();
+
+});     
       
     card.addEventListener('click', () => {
         focusLocation(college, true);
@@ -238,21 +237,32 @@ showSelectedBtn.addEventListener('click', () => {
 
 clearSelectionBtn.addEventListener('click', () => {
 
+    // Clear all selected colleges
     selectedColleges.clear();
 
-    showSelectedOnly = false;
+    // Return to ALL filter
+    currentFilter = "all";
 
+    // Highlight the ALL button again
+    filterButtons.forEach(btn => {
+
+        btn.classList.toggle(
+            "active",
+            btn.dataset.filter === "all"
+        );
+
+    });
+
+    // Reset counter
     selectedCount.innerText = "Selected: 0";
 
+    // Redraw sidebar and markers
     renderSidebar();
 
-    map.flyTo(
-        [37.3,-77.8],
-        5,
-        {
-            duration: 1
-        }
-    );
+    // Zoom back to the default map view
+    map.flyTo([37.3, -77.8], 5, {
+        duration: 1
+    });
 
 });
 
