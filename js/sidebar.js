@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 8:44PM");
+console.log("SIDEBAR FILE LOADED 8:49PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -151,7 +151,46 @@ if (markerObj && map.hasLayer(markerObj.marker)) {
     markerObj.marker.openPopup();
             }
         }
-    
+
+function zoomToSelected() {
+
+    const selectedMarkers = [];
+
+    selectedColleges.forEach(id => {
+
+        const markerObj = markerMap.get(id);
+
+        if (markerObj) {
+            selectedMarkers.push(markerObj.marker.getLatLng());
+        }
+
+    });
+
+    if (selectedMarkers.length === 0) {
+        return;
+    }
+
+    if (selectedMarkers.length === 1) {
+
+        map.flyTo(
+            selectedMarkers[0],
+            13,
+            {
+                duration: 1
+            }
+        );
+
+        return;
+    }
+
+    const bounds = L.latLngBounds(selectedMarkers);
+
+    map.fitBounds(bounds, {
+        padding: [60,60],
+        animate: true
+    });
+
+}
         
         searchInput.addEventListener('input', renderSidebar);
 
@@ -178,9 +217,19 @@ filterButtons.forEach(btn => {
 
 showSelectedBtn.addEventListener('click', () => {
 
+    if (selectedColleges.size === 0) {
+
+        alert("Select at least one college first.");
+
+        return;
+
+    }
+
     showSelectedOnly = true;
 
     renderSidebar();
+
+    zoomToSelected();
 
 });
 
@@ -196,6 +245,14 @@ clearSelectionBtn.addEventListener('click', () => {
     selectedCount.innerText = "Selected: 0";
 
     renderSidebar();
+
+    map.flyTo(
+        [37.3,-77.8],
+        5,
+        {
+            duration: 1
+        }
+    );
 
 });
 
