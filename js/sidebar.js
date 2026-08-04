@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 8:36PM");
+console.log("SIDEBAR FILE LOADED 8:39PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -192,6 +192,8 @@ clearSelectionBtn.addEventListener('click', () => {
     selectedColleges.clear();
 
     showSelectedOnly = false;
+
+    selectedCount.innerText = "Selected: 0";
 
     renderSidebar();
 
