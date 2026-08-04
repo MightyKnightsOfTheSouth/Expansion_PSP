@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 9:41PM");
+console.log("SIDEBAR FILE LOADED 10:33PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -11,7 +11,7 @@ const selectedCount = document.getElementById('selectedCount');
 
 let currentFilter = 'all';
 let selectedColleges = new Set();
-
+let showSelectedOnly = false;
       
 sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
@@ -48,9 +48,14 @@ else if (currentFilter === 'expansion') {
 }
 
 
+const matchesSelection =
+    !showSelectedOnly || selectedColleges.has(college.id);
+
+
 const isVisible =
     matchesSearch &&
-    matchesFilter;
+    matchesFilter &&
+    matchesSelection;
                   
 const markerObj = markerMap.get(college.id);
 
@@ -100,6 +105,10 @@ checkbox.addEventListener("change", () => {
 
     selectedCount.innerText =
         `Selected: ${selectedColleges.size}`;
+
+    showSelectedOnly = selectedColleges.size > 0;
+
+    renderSidebar();
 
     zoomToSelected();
 
@@ -213,10 +222,11 @@ filterButtons.forEach(btn => {
 // CLEAR ALL SELECTIONS
 
 clearSelectionBtn.addEventListener('click', () => {
+      
 
     // Clear all selected colleges
-    selectedColleges.clear();
-      showSelectedOnly = false;
+selectedColleges.clear();
+showSelectedOnly = false;
 
     // Return to ALL filter
     currentFilter = "all";
