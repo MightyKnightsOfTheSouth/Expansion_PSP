@@ -1,4 +1,4 @@
-console.log("SIDEBAR FILE LOADED 9:13PM");
+console.log("SIDEBAR FILE LOADED 9:19PM");
 
 const sidebarList = document.getElementById('sidebarList');
 const searchInput = document.getElementById('searchInput');
@@ -7,6 +7,7 @@ const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 
 const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+const selectedCount = document.getElementById('selectedCount');
 
 let currentFilter = 'all';
 let selectedColleges = new Set();
@@ -45,9 +46,8 @@ else if (currentFilter === 'expansion') {
     matchesFilter = college.exists === false;
 }
 
-const matchesSelection =
-    !showSelectedOnly || selectedColleges.has(college.id);
-
+const matchesSelection = true;
+                  
 
 const isVisible =
     matchesSearch &&
@@ -212,27 +212,6 @@ filterButtons.forEach(btn => {
 });
 
 
-// SHOW ONLY SELECTED COLLEGES
-
-showSelectedBtn.addEventListener('click', () => {
-
-    if (selectedColleges.size === 0) {
-
-        alert("Select at least one college first.");
-
-        return;
-
-    }
-
-    showSelectedOnly = true;
-
-    renderSidebar();
-
-    zoomToSelected();
-
-});
-
-
 // CLEAR ALL SELECTIONS
 
 clearSelectionBtn.addEventListener('click', () => {
@@ -254,7 +233,7 @@ clearSelectionBtn.addEventListener('click', () => {
     });
 
     // Reset counter
-    selectedCount.innerText = "Selected: 0";
+    selectedCount.innerText = `Selected: ${selectedColleges.size}`;
 
     // Redraw sidebar and markers
     renderSidebar();
