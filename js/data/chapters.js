@@ -272,5 +272,5 @@
                 logo: "images/pspshield.png",
                 bio: "Fearless Phi Chapter established at Colorado College.",
                 mapsLink: "https://maps.google.com/?q=14+E+Cache+La+Poudre+St,+Colorado+Springs,+Colorado"
-            },
+            }
 ];
