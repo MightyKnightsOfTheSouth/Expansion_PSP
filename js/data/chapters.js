@@ -1,5 +1,5 @@
         // Complete official chapter list
-        const collegiateData = [
+        const chapters = [
             {
                 id: "alpha",
                 name: "Montclair State University",
