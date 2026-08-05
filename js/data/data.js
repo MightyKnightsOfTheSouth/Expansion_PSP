@@ -1,4 +1,0 @@
-const collegiateData = [
-    ...chapters,
-    ...expansion
-];
