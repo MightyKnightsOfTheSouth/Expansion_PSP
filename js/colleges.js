@@ -1,4 +1,7 @@
-        // Complete official chapter list
+        // Ctrl+F to find and edit a university. This file contains all schools.
+        // Chapters -> Expansion 
+        // Order is: Chapters - NJ Schools - NC Schools - VA Schools - PA Schools - MD Schools - DC Schools - DE Schools
+        // Chapter list
         const collegiateData = [
             {
                 id: "alpha",
@@ -276,13 +279,15 @@
 
 
                 
-
-
-                
-                      // =========================
-                // Expansion Institutions
                 // =========================
-
+                // =========================
+                // =========================                
+                // =========================
+                // EXPANSION INSTITUTIONS
+                // =========================
+                // =========================
+                // =========================
+                // =========================
 
 
                 
@@ -291,7 +296,7 @@
                 
 
             // =========================
-            // NJ Schools
+            //       NJ Schools
             // =========================
 
                 
@@ -962,7 +967,7 @@
                 
             
             // =========================
-            // VA Schools
+            //       VA Schools
             // =========================
 
 
@@ -1440,7 +1445,7 @@
                 
      
             // =========================
-            // PA Schools
+            //        PA Schools
             // =========================
 
 
@@ -2582,7 +2587,7 @@
                 
            
             // =========================
-            // MD Schools
+            //       MD Schools
             // =========================
 
 
@@ -2826,8 +2831,8 @@
                 
 
                 // =========================
-            // DC Schools
-            // =========================
+                //        DC Schools
+                // =========================
 
 
 
@@ -2927,8 +2932,8 @@
 
                 
                 // =========================
-            // DE Schools
-            // =========================
+                //        DE Schools
+                // =========================
 
 
 
